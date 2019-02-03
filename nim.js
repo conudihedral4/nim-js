@@ -98,27 +98,27 @@ function setup() {
   boo = loadSound(audioName4);
 
   /* load images */
-  donut = loadImage("donut_full.png");
-  select = loadImage("select.png");
-  quit = loadImage("quit.png");
-  reset = loadImage("reset.png");
-  myConfirm = loadImage("confirm.png");
-  playerOn = loadImage("player_on.png");
-  playerOff = loadImage("player_off.png");
-  playerOneOn = loadImage("player1_on.png");
-  playerOneOff = loadImage("player1_off.png");
-  playerTwoOn = loadImage("player2_on.png");
-  playerTwoOff = loadImage("player2_off.png");
-  cpuOn = loadImage("cpu_on.png");
-  cpuOff = loadImage("cpu_off.png");
-  canvas = loadImage("background.png");
-  win = loadImage("win.png");
-  win_p1 = loadImage("win_p1.png");
-  win_p2 = loadImage("win_p2.png");
-  lose = loadImage("lose.png");
-  confirmNo = loadImage("confirm_no.png");
-  one_start = loadImage("one_p.png");
-  two_start = loadImage("two_p.png");
+  donut = loadImage("data/donut_full.png");
+  select = loadImage("data/select.png");
+  quit = loadImage("data/quit.png");
+  reset = loadImage("data/reset.png");
+  myConfirm = loadImage("data/confirm.png");
+  playerOn = loadImage("data/player_on.png");
+  playerOff = loadImage("data/player_off.png");
+  playerOneOn = loadImage("data/player1_on.png");
+  playerOneOff = loadImage("data/player1_off.png");
+  playerTwoOn = loadImage("data/player2_on.png");
+  playerTwoOff = loadImage("data/player2_off.png");
+  cpuOn = loadImage("data/cpu_on.png");
+  cpuOff = loadImage("data/cpu_off.png");
+  canvas = loadImage("data/background.png");
+  win = loadImage("data/win.png");
+  win_p1 = loadImage("data/win_p1.png");
+  win_p2 = loadImage("data/win_p2.png");
+  lose = loadImage("data/lose.png");
+  confirmNo = loadImage("data/confirm_no.png");
+  one_start = loadImage("data/one_p.png");
+  two_start = loadImage("data/two_p.png");
 
   /* load fonts */
   titleFont = loadFont("MunroSmall-172.vlw");
