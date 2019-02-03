@@ -73,7 +73,10 @@ class Game {
   createMatrix() {
     /* buffer distance on either side of item */
     var bufferDist = iconDim / 8;
-    var matrix = Item[numRows][maxItems];
+    var matrix = Array(numRows);
+    for (var i=0; i<numRows; ++i) {
+      matrix[i] = Array(maxItems);
+    }
 
     /* start at bottom of screen */
     var y = 400 - (iconDim + bufferDist);
