@@ -19,7 +19,7 @@ class Item {
 
   /* Use default png file */
   constructor(x, y, width, height) {
-    this.icon = loadImage("donut_full.png");
+    this.icon = loadImage("data/donut_full.png");
     this.x = x;
     this.y = y;
     this.width = width;
@@ -34,11 +34,11 @@ class Item {
   }
 
   animate() {
-    this.icon = loadImage("donut_onebite.png");
+    this.icon = loadImage("data/donut_onebite.png");
     delay(300);
     redraw();
 
-    this.icon = loadImage("donut_twobites.png");
+    this.icon = loadImage("data/donut_twobites.png");
     delay(300);
     redraw();
 

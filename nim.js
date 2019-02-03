@@ -121,9 +121,9 @@ function setup() {
   two_start = loadImage("data/two_p.png");
 
   /* load fonts */
-  titleFont = loadFont("MunroSmall-172.vlw");
+  titleFont = loadFont("data/MunroSmall-172.vlw");
 
-  g = Game(3,5);
+  g = new Game(3,5);
   createCanvas(600, 450);
   background(0);
   noStroke();
@@ -196,7 +196,7 @@ function mousePressed() {
     /* 1P start */
     if ((mouseX >= 40) && (mouseY >= 340) && (mouseX < 240) && (mouseY < 420)) {
       lonely = true;
-      g = Game(startMin, startMin + startRows - 1);
+      g = new Game(startMin, startMin + startRows - 1);
       menuScreen = false;
       /* load sound */
       if (soundtrack){
@@ -206,7 +206,7 @@ function mousePressed() {
     /* 2P start */
     if ((mouseX >= 360) && (mouseY >= 340) && (mouseX < 560) && (mouseY < 420)) {
       lonely = false;
-      g = Game(startMin, startMin + startRows - 1);
+      g = new Game(startMin, startMin + startRows - 1);
       menuScreen = false;
       /* load sound */
       if (soundtrack){
