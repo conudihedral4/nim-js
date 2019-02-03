@@ -121,7 +121,7 @@ function setup() {
   two_start = loadImage("data/two_p.png");
 
   /* load fonts */
-  titleFont = loadFont("data/MunroSmall-172.vlw");
+  titleFont = loadFont("data/munro-small.ttf");
 
   g = new Game(3,5);
   createCanvas(600, 450);

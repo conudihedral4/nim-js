@@ -9,7 +9,7 @@ class Game {
 
   /* constructs a heap with specified min/max row sizes */
   constructor(minItems, maxItems) {
-    this.ran = Robot();
+    this.ran = new Robot();
 
     /* OLD JAVA CODE
     if (maxItems <= minItems) {
