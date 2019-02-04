@@ -482,15 +482,12 @@ function draw() {
     if (winLose == 1) {
       if (lonely) {
         image(win, 200, 185, 200, 80);
-        victory.cue(6);
         victory.play();
       } else if (playerOneTurn) {
         image(win_p1, 200, 185, 200, 80);
-        victory.cue(6);
         victory.play();
       } else {
         image(win_p2, 200, 185, 200, 80);
-        victory.cue(6);
         victory.play();
       }
     }
@@ -501,12 +498,10 @@ function draw() {
       } else if (playerOneTurn) {
         //P1 lost so P2 won
         image(win_p2, 200, 185, 200, 80);
-        victory.cue(6);
         victory.play();
       } else {
         //P2 lost so P1 won
         image(win_p1, 200, 185, 200, 80);
-        victory.cue(6);
         victory.play();
       }
     }
@@ -603,7 +598,7 @@ function Robot() {
 
       //we want to remove from the row that has 1 item
       //results in an odd number of heaps of size 1
-      var index_of_max = findIndex(heaps, max_items);
+      var index_of_max = this.findIndex(heaps, max_items);
       move[0] = index_of_max;
 
       var boolInt = (odd_heaps) ? 1 : 0;
