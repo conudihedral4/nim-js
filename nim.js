@@ -155,7 +155,7 @@ function Game(minItems,maxItems) {
       }
     }
     if (won) {
-      this.winLose = misere ? 1 : -1;
+      winLose = misere ? 1 : -1;
     }
   }
 }
