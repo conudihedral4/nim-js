@@ -431,7 +431,6 @@ function draw() {
     image(select, 478+musicOffset, 315);
   } else {
     /* draw doughnuts */
-    console.log(g.numRows);
     /* print item matrix to screen */
     for (let i=0; i<g.numRows; ++i) {
       let numItems = g.minItems + i;
@@ -593,7 +592,7 @@ function Robot() {
       //checks if we have an odd number of nonempty heaps
       //and the max number of items out of all of the heaps
       var odd_heaps = (moves_left % 2 == 1);
-      var max_items = findMax(heaps);
+      var max_items = this.findMax(heaps);
 
       //if maximum number of items is 1, i.e. we only have heaps of size 1 left
       //and there are an odd number of such heaps
