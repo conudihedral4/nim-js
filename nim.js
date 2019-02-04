@@ -69,6 +69,97 @@ var path3;
 var audioName4 = "data/boo.wav";
 var path4;
 
+function Game(minItems,maxItems) {
+  //var minItems;            // size of top row
+  //var maxItems;            // size of bottom row
+  //var table;             // current number of items in each row
+  //var numRows;             // number of rows
+  //var iconDim;             // side-length of a single (square) icon
+  //var itemMatrix;     // the items in each row
+  //var ran;
+
+  /* constructs a heap with specified min/max row sizes */
+  this.ran = new Robot();
+
+  /* OLD JAVA CODE
+  if (maxItems <= minItems) {
+    throw new IllegalArgumentException("Invalid row sizes: HEAP()");
+  }
+  if (maxItems - minItems > 5) {
+    throw new IllegalArgumentException("Number of rows cannot exceed 6");
+  }
+  */
+
+  this.minItems = minItems;
+  this.maxItems = maxItems;
+  this.numRows = maxItems - minItems + 1;
+
+  /* initialize table that counts items in each row */
+  this.table = Array(this.numRows);
+  for (var i=0; i<this.numRows; ++i) {
+    this.table[i] = i+minItems;
+  }
+
+  /* determine size of icons */
+  this.iconDim = 50;
+  if (maxItems > 8) {
+    this.iconDim = 480/maxItems;
+  }
+  /* buffer distance on either side of item */
+  var bufferDist = this.iconDim / 8;
+  var matrix = Array(this.numRows);
+  for (var i=0; i<this.numRows; ++i) {
+    matrix[i] = Array(maxItems);
+  }
+
+  /* start at bottom of screen */
+  var y = 400 - (this.iconDim + bufferDist);
+
+  /* loop through every row */
+  for (var i=this.numRows-1; i>=0; --i) {
+    var numItems = this.minItems + i;
+    var x = (600 - ((numItems*(this.iconDim + 2*bufferDist)))) / 2;
+    /* loop through number of items in row */
+    for (var j=0; j<numItems; ++j) {
+      /* create new item with unique coordinates */
+      matrix[i][j] = new Item(x + bufferDist, y, this.iconDim, this.iconDim);
+      x += this.iconDim + 2*bufferDist;
+    }
+    y -= this.iconDim + bufferDist;
+  }
+
+  this.itemMatrix = matrix
+
+  /* the computer plays a turn */
+  this.cpuNormalMove = function () {
+    var mode = misere ? "misere" : "normal";
+    var move = this.ran.nextMove(this.table, mode);
+    var left = move[1];
+    var correctRow = move[0];
+    for (var i=0; i<this.minItems+correctRow; ++i) {
+      if (!this.itemMatrix[correctRow][i].clicked) {
+        this.itemMatrix[correctRow][i].clicked = true;
+        eatDonut.play();
+        --left;
+      }
+      if (left == 0) {
+        break;
+      }
+    }
+    this.table[correctRow] -= move[1];
+    var won = true;
+    for (var i=0; i<this.numRows; ++i) {
+      if (this.table[i] != 0) {
+        won = false;
+        break;
+      }
+    }
+    if (won) {
+      this.winLose = misere ? 1 : -1;
+    }
+  }
+}
+
 function setup() {
   /* initialize game variables to defaults */
   chosenRow = -1;
@@ -99,6 +190,8 @@ function setup() {
 
   /* load images */
   donut = loadImage("data/donut_full.png");
+  oneBite = loadImage("data/donut_onebite.png");
+  twoBites = loadImage("data/donut_twobites.png");
   select = loadImage("data/select.png");
   quit = loadImage("data/quit.png");
   reset = loadImage("data/reset.png");
@@ -269,7 +362,7 @@ function mousePressed() {
 
   /* check if reset button clicked */
   if ((mouseX >= 500) && (mouseX < 550) && (mouseY >= 430) && (mouseY < 450)) {
-    g = Game(g.minItems,g.maxItems);
+    g = new Game(g.minItems,g.maxItems);
     playersTurn = true;
     playerOneTurn = true;
     playerTwoTurn = false;
@@ -338,7 +431,26 @@ function draw() {
     image(select, 478+musicOffset, 315);
   } else {
     /* draw doughnuts */
-    g.display();
+    console.log(g.numRows);
+    /* print item matrix to screen */
+    for (let i=0; i<g.numRows; ++i) {
+      console.log("first for loop")
+      let numItems = g.minItems + i;
+      for (let j=0; j<numItems; ++j) {
+        console.log("snd for loop")
+        if (!g.itemMatrix[i][j].clicked) {
+          let p = g.itemMatrix[i][j];
+          image(p.icon, p.x, p.y, p.width, p.height);
+        }
+      }
+    }
+    /*
+    this.show = function () {
+      if (!this.clicked) {
+        image(this.icon, this.x, this.y, this.width, this.height);
+      }
+    }
+    */
 
     /* draw buttons */
     image(quit, 550, 430, 50, 20);   // quit button
@@ -403,4 +515,180 @@ function draw() {
     }
 
   }
+}
+
+function Item(x,y,width,height) {
+  //PImage icon;     // image object
+  //var x;           // x-coordinate
+  //var y;           // y-coordinate
+  //var width;       // display width
+  //var height;      // display height
+  //var clicked; // has item been clicked?
+
+  /* Create new icon with specified png file
+  constructor(filename, x, y, width, height) {
+    this.icon = loadImage(filename);
+    this.x = x;
+    this.y = y;
+    this.width = width;
+    this.height = height;
+    this.clicked = false;
+  }
+  */
+
+  /* Use default png file */
+  this.icon = loadImage("data/donut_full.png");
+  this.x = x;
+  this.y = y;
+  this.width = width;
+  this.height = height;
+  this.clicked = false;
+
+  this.animate = function () {
+    this.icon = oneBite;
+    delay(300);
+    redraw();
+
+    this.icon = twoBites;
+    delay(300);
+    redraw();
+
+    this.clicked = true;
+  }
+}
+
+function Robot() {
+  this.nextMove = function (heaps, gameType) {
+
+    //assert heaps != null;
+
+    var is_misere = (gameType === "misere");
+    var move = Array(2);
+
+    //general strategy is identical for misere and normal play, until endgame state
+    //endgame is defined as if there are about to be only heaps of size one left
+    var endgame = false;
+
+    //count number of heaps that have strictly more than one items left
+    var moreThanOne = 0;
+    for (var i=0; i<heaps.length; i++) {
+      if (heaps[i] > 1) {
+        moreThanOne++;
+      }
+    }
+
+    //endgame occurs if we have only 1 or 0 heaps with strictly more than one items
+    endgame = (moreThanOne <= 1);
+
+    //in a misere game and endgame state
+    //make a move that will end with an odd number of heaps all containing 1
+    if (is_misere && endgame) {
+
+      //count number of nonempty heaps
+      var moves_left=0;
+      for (var i=0; i<heaps.length; i++) {
+        if (heaps[i] != 0) {
+          moves_left++;
+        }
+      }
+
+      //checks if we have an odd number of nonempty heaps
+      //and the max number of items out of all of the heaps
+      var odd_heaps = (moves_left % 2 == 1);
+      var max_items = findMax(heaps);
+
+      //if maximum number of items is 1, i.e. we only have heaps of size 1 left
+      //and there are an odd number of such heaps
+      //robot doesn't have a winning move, therefore leave random move
+      if (max_items == 1 && odd_heaps) {
+        return this.randomMove(heaps);
+      }
+
+      //we want to remove from the row that has 1 item
+      //results in an odd number of heaps of size 1
+      var index_of_max = findIndex(heaps, max_items);
+      move[0] = index_of_max;
+
+      var boolInt = (odd_heaps) ? 1 : 0;
+      move[1] = max_items - boolInt;
+
+      return move;
+    }
+
+    //if we aren't in misere or endgame, then the gameplay is the same!
+    //find nimsum and try to make it 0:
+    var nimSum = this.calcNimSum(heaps);
+
+    if (nimSum == 0){
+      //no winning move if nimsum is 0
+      return this.randomMove(heaps);
+    }
+
+    //nimSum doesn't equal 0 so the bot has a winning move
+    for (var i=0; i<heaps.length; i++) {
+      var target_size = heaps[i] ^ nimSum;
+      if (target_size < heaps[i]) {
+        move[0]= i;
+        move[1]= heaps[i] - target_size;
+        return move;
+      }
+    }
+    move[0] = 0;
+    move[1] = 0;
+    return move;
+  }
+
+  //helper methods!
+
+  //max of int array
+  this.findMax = function (arr) {
+    //assume max is first entry
+    var max = arr[0];
+    for (var i = 0; i<arr.length; i++) {
+      if (arr[i] > max) {
+        max = arr[i];
+      }
+    }
+    return max;
+  }
+
+  //index of max
+  this.findIndex = function (arr, max) {
+    for (var i=0; i<arr.length; i++) {
+      if (arr[i] == max) {
+        return i;
+      }
+    }
+    //dummy return
+    return 0;
+  }
+
+  //generates a random move if robot can't win
+  this.randomMove = function (heaps) {
+    var retTable = Array(2);
+    while(true){
+      var r = int((random(heaps.length)));
+      if (heaps[r] != 0) {
+        retTable[0] = r;
+        break;
+      }
+    }
+
+    var n = int(random(1, heaps[retTable[0]]+1));
+    //random integer from 1 to heaps[r] inclusive
+    retTable[1] = n;
+
+    return retTable;
+  }
+
+  //calculates nimsum
+  this.calcNimSum = function (heaps) {
+    var toReturn = heaps[0];
+
+    for (var i=1; i<heaps.length; i++) {
+      toReturn = toReturn ^ heaps[i];
+    }
+    return toReturn;
+  }
+
 }
