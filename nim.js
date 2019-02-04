@@ -434,10 +434,8 @@ function draw() {
     console.log(g.numRows);
     /* print item matrix to screen */
     for (let i=0; i<g.numRows; ++i) {
-      console.log("first for loop")
       let numItems = g.minItems + i;
       for (let j=0; j<numItems; ++j) {
-        console.log("snd for loop")
         if (!g.itemMatrix[i][j].clicked) {
           let p = g.itemMatrix[i][j];
           image(p.icon, p.x, p.y, p.width, p.height);
